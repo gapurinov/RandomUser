@@ -24,6 +24,8 @@ class ProfileView: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Properties
+    
     private lazy var navigationBar: UINavigationBar = {
         let navigationBar = UINavigationBar()
         navigationBar.translatesAutoresizingMaskIntoConstraints = false
@@ -102,6 +104,8 @@ class ProfileView: UIViewController {
         return view
     }()
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -110,6 +114,8 @@ class ProfileView: UIViewController {
         setupSubviewsConstraints()
         presenter.getUser()
     }
+    
+    // MARK: - Constraints
     
     private func setupSubviews() {
         view.addSubview(navigationBar)
@@ -173,12 +179,15 @@ class ProfileView: UIViewController {
         ])
     }
     
+    // MARK: - Private functions
+    
     @objc private func getNewUser() {
         presenter.getUser()
     }
 }
 
 // MARK: - Configurable
+
 extension ProfileView: Configurable {
     func configure(user: User) {
         let urlString = user.picture.large
@@ -198,6 +207,7 @@ extension ProfileView: Configurable {
 }
 
 // MARK: - ProfileViewProtocol
+
 extension ProfileView: ProfileViewProtocol {
     func success() {
         let user = presenter.response?.results[0]
@@ -212,7 +222,9 @@ extension ProfileView: ProfileViewProtocol {
         print(error.localizedDescription)
     }
 }
+
 // MARK: - UIImageView extension
+
 extension UIImageView {
     func load(url: URL) {
         DispatchQueue.global().async { [weak self] in
