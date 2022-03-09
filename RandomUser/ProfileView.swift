@@ -13,7 +13,6 @@ protocol Configurable {
 }
 
 class ProfileView: UIViewController {
-    
     let presenter: Presenter
     
     init(presenter: Presenter) {
@@ -44,7 +43,6 @@ class ProfileView: UIViewController {
     private lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
         imageView.layer.borderWidth = Constants.imageBorderWidth
         imageView.layer.borderColor = UIColor.black.cgColor
         return imageView
@@ -91,16 +89,6 @@ class ProfileView: UIViewController {
         return label
     }()
     
-    private func setupNavigationBarConstraints() {
-        navigationBar.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            navigationBar.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            navigationBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            navigationBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            navigationBar.heightAnchor.constraint(equalToConstant: Constants.navigationBarHeight)
-        ])
-    }
-    
     private lazy var labelsStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -136,11 +124,20 @@ class ProfileView: UIViewController {
         setupStackView()
     }
     
+    private func setupNavigationBarConstraints() {
+        navigationBar.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            navigationBar.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            navigationBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            navigationBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            navigationBar.heightAnchor.constraint(equalToConstant: Constants.navigationBarHeight)
+        ])
+    }
+    
     private func setupContainerViewForImage() {
         containerViewForImage.addSubview(profileImageView)
         
         containerViewForImage.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             containerViewForImage.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             containerViewForImage.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
@@ -181,6 +178,7 @@ class ProfileView: UIViewController {
     }
 }
 
+// MARK: - Configurable
 extension ProfileView: Configurable {
     func configure(user: User) {
         let urlString = user.picture.large
@@ -199,8 +197,9 @@ extension ProfileView: Configurable {
     }
 }
 
+// MARK: - ProfileViewProtocol
 extension ProfileView: ProfileViewProtocol {
-    func succes() {
+    func success() {
         let user = presenter.response?.results[0]
         guard user != nil else {
             print("URL is nil")
@@ -213,7 +212,7 @@ extension ProfileView: ProfileViewProtocol {
         print(error.localizedDescription)
     }
 }
-
+// MARK: - UIImageView extension
 extension UIImageView {
     func load(url: URL) {
         DispatchQueue.global().async { [weak self] in

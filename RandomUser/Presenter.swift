@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol ProfileViewProtocol {
-    func succes()
+    func success()
     func failure(error: Error)
 }
 
@@ -39,7 +39,7 @@ final class Presenter: PresenterProtocol {
                 switch result {
                 case .success(let response):
                     self.response = response
-                    self.view?.succes()
+                    self.view?.success()
                 case .failure(let error):
                     self.view?.failure(error: error)
                 }
